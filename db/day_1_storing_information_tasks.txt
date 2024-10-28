@@ -1,0 +1,8 @@
+You are now connected to database "nc_flix" as user "diliano".
+CREATE TABLE
+INSERT 0 4
+           title            | meets_requirement 
+----------------------------+-------------------
+ Back to the Future Part II | yes
+(1 row)
+
