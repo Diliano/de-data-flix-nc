@@ -1,0 +1,64 @@
+You are now connected to database "nc_flix" as user "diliano".
+ genre_name | num_in_stock 
+------------+--------------
+ fantasy    |            3
+ drama      |            7
+ action     |           16
+ crime      |           10
+ family     |            4
+ romance    |            0
+ comedy     |            9
+ sci_fi     |           18
+(8 rows)
+
+ avg_rating 
+------------
+       6.60
+(1 row)
+
+             title              | rating 
+--------------------------------+--------
+ Episode I - The Phantom Menace |      7
+ Toy Story                      |     10
+ Groundhog Day                  |      7
+ Independance Day               |      7
+(4 rows)
+
+ movie_id |           title            | num_in_stock 
+----------+----------------------------+--------------
+       13 | The Fellowship of the Ring |            0
+(1 row)
+
+ locations_without_a_store 
+---------------------------
+ Leicester
+ Bolton
+ Liverpool
+(3 rows)
+
+ all_locations 
+---------------
+ Leeds
+ Newcastle
+ Bolton
+ Birmingham
+ Leicester
+ Liverpool
+ Manchester
+(7 rows)
+
+ store_id |    city    | total_stock 
+----------+------------+-------------
+        2 | Manchester |          11
+(1 row)
+
+ genre_name | num_in_stock 
+------------+--------------
+ comedy     |            8
+(1 row)
+
+ genre_name | num_in_stock 
+------------+--------------
+ comedy     |            8
+(1 row)
+
