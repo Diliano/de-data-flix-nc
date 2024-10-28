@@ -1,0 +1,31 @@
+You are now connected to database "nc_flix" as user "diliano".
+ customer_name |  location  | coalesce | loyalty_membership_status 
+---------------+------------+----------+---------------------------
+ David         | Leeds      |      202 | gold status
+ Joe           | Liverpool  |       13 | silver status
+ Verity        | Leicester  |        0 | doesn't even go here
+ Cat           | Manchester |       29 | silver status
+ Alex          | Manchester |     1045 | gold status
+ Danika        | Manchester |       99 | silver status
+ Vel           | Leeds      |       14 | silver status
+ Liam          | Leeds      |        0 | doesn't even go here
+ Jim           | Leeds      |       14 | silver status
+ Paul C        | Bolton     |      198 | gold status
+ Haz           | Bolton     |        0 | doesn't even go here
+(11 rows)
+
+ customer_name | date_of_birth |  location  | loyalty_points | rank 
+---------------+---------------+------------+----------------+------
+ Paul C        | 1991-03-28    | Bolton     |            198 |    1
+ Haz           | 1992-07-02    | Bolton     |              0 |    2
+ David         | 1992-12-30    | Leeds      |            202 |    1
+ Jim           | 1989-05-01    | Leeds      |             14 |    2
+ Vel           | 1989-05-01    | Leeds      |             14 |    2
+ Liam          | 1993-10-03    | Leeds      |              0 |    4
+ Verity        | 1997-01-07    | Leicester  |              0 |    1
+ Joe           | 1989-06-21    | Liverpool  |             13 |    1
+ Alex          | 2001-06-24    | Manchester |           1045 |    1
+ Danika        | 1994-01-19    | Manchester |             99 |    2
+ Cat           | 1985-11-02    | Manchester |             29 |    3
+(11 rows)
+
