@@ -21,7 +21,7 @@ ORDER BY date_of_birth DESC;
 
 -- Query the database to find the average rating of the movies released in the 1980s.
 
-SELECT ROUND(AVG(COALESCE(rating, 0)), 2) AS avg_rating_for_1980s_release
+SELECT ROUND(AVG(rating), 2) AS avg_rating_for_1980s_release
 FROM movies
 WHERE EXTRACT(YEAR FROM release_date) BETWEEN 1980 AND 1989;
 

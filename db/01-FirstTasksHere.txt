@@ -21,7 +21,7 @@ You are now connected to database "nc_flix" as user "diliano".
 
  avg_rating_for_1980s_release 
 ------------------------------
-                         4.67
+                         7.00
 (1 row)
 
   location  | sum  | round  
