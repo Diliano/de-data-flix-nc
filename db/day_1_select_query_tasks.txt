@@ -57,8 +57,3 @@ You are now connected to database "nc_flix" as user "diliano".
  comedy     |            8
 (1 row)
 
- genre_name | num_in_stock 
-------------+--------------
- comedy     |            8
-(1 row)
-
