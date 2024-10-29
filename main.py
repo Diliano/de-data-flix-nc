@@ -2,9 +2,12 @@ from connection import connect_to_db
 from pg8000.native import identifier
 
 
-def select_movies(sort_by="title"):
+def select_movies(sort_by="title", order="ASC"):
     if sort_by not in {"title", "release_date", "rating", "cost"}:
         raise ValueError(f"Invalid sort_by argument provided: {sort_by}")
+
+    if order not in {"ASC", "DESC"}:
+        raise ValueError(f"Invalid order argument provided: {order}")
 
     db = connect_to_db()
 
@@ -16,9 +19,9 @@ def select_movies(sort_by="title"):
     """
 
     if sort_by == "rating":
-        select_query += f"""ORDER BY COALESCE(rating, -1);"""
+        select_query += f"""ORDER BY COALESCE(rating, -1) {identifier(order)}"""
     else:
-        select_query += f"""ORDER BY {identifier(sort_by)}"""
+        select_query += f"""ORDER BY {identifier(sort_by)} {identifier(order)}"""
 
     movies = db.run(sql=select_query)
     db.close()

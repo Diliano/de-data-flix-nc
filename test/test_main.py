@@ -38,12 +38,12 @@ class TestSelectMovies:
                 pulp_fiction = movie
         assert pulp_fiction["classification"] == "No classification available"
 
-    def test_default_movies_sorted_by_title(self):
+    def test_default_movies_sorted_by_title_ascending(self):
         movies = select_movies()["movies"]
         titles = [movie["title"] for movie in movies]
         assert titles == sorted(titles)
 
-    def test_movies_sorted_by_specified_argument(self):
+    def test_movies_sorted_by_specified_argument_ascending(self):
         movies = select_movies(sort_by="release_date")["movies"]
         release_dates = [movie["release_date"] for movie in movies]
         assert release_dates == sorted(release_dates)
@@ -56,7 +56,25 @@ class TestSelectMovies:
         costs = [movie["cost"] for movie in movies]
         assert costs == sorted(costs)
 
+    def test_movies_sorted_by_specified_order(self):
+        movies = select_movies(sort_by="release_date", order="DESC")["movies"]
+        release_dates = [movie["release_date"] for movie in movies]
+        assert release_dates == sorted(release_dates, reverse=True)
+
+        movies = select_movies(sort_by="cost", order="DESC")["movies"]
+        costs = [movie["cost"] for movie in movies]
+        assert costs == sorted(costs, reverse=True)
+
+        movies = select_movies(sort_by="rating", order="ASC")["movies"]
+        ratings = [movie["rating"] for movie in movies]
+        assert ratings == sorted(ratings)
+
     def test_raises_value_exception_if_provided_invalid_sort_by_param(self):
         with pytest.raises(ValueError) as excinfo:
             select_movies(sort_by="randomcolumn")
         assert str(excinfo.value) == "Invalid sort_by argument provided: randomcolumn"
+
+    def test_raises_value_exception_if_provided_invalid_order_param(self):
+        with pytest.raises(ValueError) as excinfo:
+            select_movies(order="randomorder")
+        assert str(excinfo.value) == "Invalid order argument provided: randomorder"
