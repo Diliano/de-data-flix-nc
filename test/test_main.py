@@ -1,5 +1,6 @@
 from main import select_movies
 from decimal import Decimal
+import pytest
 
 
 class TestSelectMovies:
@@ -54,3 +55,8 @@ class TestSelectMovies:
         movies = select_movies(sort_by="cost")["movies"]
         costs = [movie["cost"] for movie in movies]
         assert costs == sorted(costs)
+
+    def test_raises_value_exception_if_provided_invalid_sort_by_param(self):
+        with pytest.raises(ValueError) as excinfo:
+            select_movies(sort_by="randomcolumn")
+        assert str(excinfo.value) == "Invalid sort_by argument provided: randomcolumn"

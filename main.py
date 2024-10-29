@@ -3,6 +3,9 @@ from pg8000.native import identifier
 
 
 def select_movies(sort_by="title"):
+    if sort_by not in {"title", "release_date", "rating", "cost"}:
+        raise ValueError(f"Invalid sort_by argument provided: {sort_by}")
+
     db = connect_to_db()
 
     # If rating is NULL, replace with -1 as a placeholder
