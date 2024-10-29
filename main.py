@@ -1,31 +1,34 @@
 from connection import connect_to_db
+from pg8000.native import identifier
 
 
-def select_movies():
+def select_movies(sort_by="title"):
     db = connect_to_db()
 
-    select_query = """
-        SELECT *
+    # If rating is NULL, replace with -1 as a placeholder
+    # If classification is NULL, replace with a descriptive string
+    select_query = f"""
+        SELECT movie_id, title, release_date, COALESCE(rating, -1), cost, COALESCE(classification, 'No classification available')
         FROM movies
-        ORDER BY title;
     """
+
+    if sort_by == "rating":
+        select_query += f"""ORDER BY COALESCE(rating, -1);"""
+    else:
+        select_query += f"""ORDER BY {identifier(sort_by)}"""
 
     movies = db.run(sql=select_query)
     db.close()
 
     # Convert datetime object to a date string
-    # If rating is None, replace with -1 as a placeholder
-    # If classification is None, replace with a descriptive string
     formatted_movies = [
         {
             "movie_id": movie[0],
             "title": movie[1],
             "release_date": movie[2].strftime("%Y-%m-%d"),
-            "rating": -1 if movie[3] is None else movie[3],
+            "rating": movie[3],
             "cost": movie[4],
-            "classification": (
-                "No classification available" if movie[5] is None else movie[5]
-            ),
+            "classification": movie[5],
         }
         for movie in movies
     ]
