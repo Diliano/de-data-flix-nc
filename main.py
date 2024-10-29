@@ -2,7 +2,7 @@ from connection import connect_to_db
 from pg8000.native import identifier, literal
 
 
-def select_movies(sort_by="title", order="ASC", min_rating=None):
+def select_movies(sort_by="title", order="ASC", min_rating=None, location=None):
     if sort_by not in {"title", "release_date", "rating", "cost"}:
         raise ValueError(f"Invalid sort_by argument provided: {sort_by}")
 
@@ -11,6 +11,9 @@ def select_movies(sort_by="title", order="ASC", min_rating=None):
 
     if min_rating and min_rating not in range(0, 11):
         raise ValueError(f"Invalid min_rating argument provided: {min_rating}")
+
+    if location and location not in {"Leeds", "Manchester", "Newcastle", "Birmingham"}:
+        raise ValueError(f"Invalid location argument provided: {location}")
 
     db = connect_to_db()
 
@@ -23,6 +26,22 @@ def select_movies(sort_by="title", order="ASC", min_rating=None):
 
     if min_rating:
         select_query += f""" WHERE rating >= {literal(min_rating)}"""
+
+    if location:
+        if min_rating:
+            select_query += f""" AND movie_id IN (
+                SELECT stock.movie_id
+                FROM stock
+                JOIN stores ON stock.store_id = stores.store_id 
+                WHERE stores.city = {literal(location)}
+            )"""
+        else:
+            select_query += f""" WHERE movie_id IN (
+                SELECT stock.movie_id
+                FROM stock
+                JOIN stores ON stock.store_id = stores.store_id 
+                WHERE stores.city = {literal(location)}
+            )"""
 
     if sort_by == "rating":
         select_query += f""" ORDER BY COALESCE(rating, -1) {identifier(order)}"""

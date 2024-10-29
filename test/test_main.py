@@ -1,6 +1,7 @@
 from main import select_movies
 from decimal import Decimal
 import pytest
+from connection import connect_to_db
 
 
 class TestSelectMoviesDefault:
@@ -103,6 +104,42 @@ class TestSelectMoviesWithSpecifiedMinRating:
             select_movies(sort_by="rating", min_rating=20)
         assert str(excinfo.value) == "Invalid min_rating argument provided: 20"
 
+
+class TestSelectMoviesAvailableBySpecifiedLocation:
+    def test_filters_available_movies_by_specified_location(self):
+        movies = select_movies(location="Newcastle")["movies"]
+        movie_ids = [movie["movie_id"] for movie in movies]
+        db = connect_to_db()
+        results = db.run(
+            f"""
+            SELECT stock.movie_id
+            FROM stock
+            JOIN stores ON stock.store_id = stores.store_id 
+            WHERE stores.city = 'Newcastle'
+        """
+        )
+        db.close()
+        db_ids = [result[0] for result in results]
+        for id in movie_ids:
+            assert id in db_ids
+
+        movies = select_movies(location="Manchester")["movies"]
+        movie_ids = [movie["movie_id"] for movie in movies]
+        db = connect_to_db()
+        results = db.run(
+            f"""
+            SELECT stock.movie_id
+            FROM stock
+            JOIN stores ON stock.store_id = stores.store_id 
+            WHERE stores.city = 'Manchester'
+        """
+        )
+        db.close()
+        db_ids = [result[0] for result in results]
+        for id in movie_ids:
+            assert id in db_ids
+
+    def test_raises_value_exception_if_provided_invalid_location(self):
         with pytest.raises(ValueError) as excinfo:
-            select_movies(sort_by="rating", min_rating="ten")
-        assert str(excinfo.value) == "Invalid min_rating argument provided: ten"
+            select_movies(location="fakelocation")
+        assert str(excinfo.value) == "Invalid location argument provided: fakelocation"
