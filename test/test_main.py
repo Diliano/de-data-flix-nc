@@ -1,4 +1,5 @@
 from main import select_movies
+from decimal import Decimal
 
 
 class TestSelectMovies:
@@ -10,6 +11,7 @@ class TestSelectMovies:
             assert isinstance(movie["title"], str)
             assert isinstance(movie["release_date"], str)
             assert isinstance(movie["rating"], int)
+            assert isinstance(movie["cost"], Decimal)
             assert isinstance(movie["classification"], str)
 
     def test_converts_datetime_object_to_date_string(self):

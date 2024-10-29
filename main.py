@@ -5,7 +5,7 @@ def select_movies():
     db = connect_to_db()
 
     select_query = """
-        SELECT movie_id, title, release_date, rating, classification
+        SELECT *
         FROM movies
         ORDER BY title;
     """
@@ -22,8 +22,9 @@ def select_movies():
             "title": movie[1],
             "release_date": movie[2].strftime("%Y-%m-%d"),
             "rating": -1 if movie[3] is None else movie[3],
+            "cost": movie[4],
             "classification": (
-                "No classification available" if movie[4] is None else movie[4]
+                "No classification available" if movie[5] is None else movie[5]
             ),
         }
         for movie in movies
