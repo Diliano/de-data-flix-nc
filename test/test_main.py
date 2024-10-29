@@ -3,7 +3,7 @@ from decimal import Decimal
 import pytest
 
 
-class TestSelectMovies:
+class TestSelectMoviesDefault:
     def test_builds_list_of_movie_dictionaries_with_desired_types(self):
         movies = select_movies()["movies"]
         assert len(movies) == 25
@@ -43,6 +43,8 @@ class TestSelectMovies:
         titles = [movie["title"] for movie in movies]
         assert titles == sorted(titles)
 
+
+class TestSelectMoviesWithSpecifiedSortBy:
     def test_movies_sorted_by_specified_argument_ascending(self):
         movies = select_movies(sort_by="release_date")["movies"]
         release_dates = [movie["release_date"] for movie in movies]
@@ -56,6 +58,13 @@ class TestSelectMovies:
         costs = [movie["cost"] for movie in movies]
         assert costs == sorted(costs)
 
+    def test_raises_value_exception_if_provided_invalid_sort_by_param(self):
+        with pytest.raises(ValueError) as excinfo:
+            select_movies(sort_by="randomcolumn")
+        assert str(excinfo.value) == "Invalid sort_by argument provided: randomcolumn"
+
+
+class TestSelectMoviesWithSpecifiedOrder:
     def test_movies_sorted_by_specified_order(self):
         movies = select_movies(sort_by="release_date", order="DESC")["movies"]
         release_dates = [movie["release_date"] for movie in movies]
@@ -69,12 +78,31 @@ class TestSelectMovies:
         ratings = [movie["rating"] for movie in movies]
         assert ratings == sorted(ratings)
 
-    def test_raises_value_exception_if_provided_invalid_sort_by_param(self):
-        with pytest.raises(ValueError) as excinfo:
-            select_movies(sort_by="randomcolumn")
-        assert str(excinfo.value) == "Invalid sort_by argument provided: randomcolumn"
-
     def test_raises_value_exception_if_provided_invalid_order_param(self):
         with pytest.raises(ValueError) as excinfo:
             select_movies(order="randomorder")
         assert str(excinfo.value) == "Invalid order argument provided: randomorder"
+
+
+class TestSelectMoviesWithSpecifiedMinRating:
+    def test_movies_filtered_by_specified_min_rating(self):
+        movies = select_movies(sort_by="rating", min_rating=5)["movies"]
+        ratings = [movie["rating"] for movie in movies]
+        assert all(rating >= 5 for rating in ratings)
+
+        movies = select_movies(min_rating=8)["movies"]
+        ratings = [movie["rating"] for movie in movies]
+        assert all(rating >= 8 for rating in ratings)
+
+    def test_raises_value_exception_if_provided_invalid_min_rating(self):
+        with pytest.raises(ValueError) as excinfo:
+            select_movies(sort_by="rating", min_rating=-10)
+        assert str(excinfo.value) == "Invalid min_rating argument provided: -10"
+
+        with pytest.raises(ValueError) as excinfo:
+            select_movies(sort_by="rating", min_rating=20)
+        assert str(excinfo.value) == "Invalid min_rating argument provided: 20"
+
+        with pytest.raises(ValueError) as excinfo:
+            select_movies(sort_by="rating", min_rating="ten")
+        assert str(excinfo.value) == "Invalid min_rating argument provided: ten"

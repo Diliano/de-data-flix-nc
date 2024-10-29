@@ -1,13 +1,16 @@
 from connection import connect_to_db
-from pg8000.native import identifier
+from pg8000.native import identifier, literal
 
 
-def select_movies(sort_by="title", order="ASC"):
+def select_movies(sort_by="title", order="ASC", min_rating=None):
     if sort_by not in {"title", "release_date", "rating", "cost"}:
         raise ValueError(f"Invalid sort_by argument provided: {sort_by}")
 
     if order not in {"ASC", "DESC"}:
         raise ValueError(f"Invalid order argument provided: {order}")
+
+    if min_rating and min_rating not in range(0, 11):
+        raise ValueError(f"Invalid min_rating argument provided: {min_rating}")
 
     db = connect_to_db()
 
@@ -18,10 +21,13 @@ def select_movies(sort_by="title", order="ASC"):
         FROM movies
     """
 
+    if min_rating:
+        select_query += f""" WHERE rating >= {literal(min_rating)}"""
+
     if sort_by == "rating":
-        select_query += f"""ORDER BY COALESCE(rating, -1) {identifier(order)}"""
+        select_query += f""" ORDER BY COALESCE(rating, -1) {identifier(order)}"""
     else:
-        select_query += f"""ORDER BY {identifier(sort_by)} {identifier(order)}"""
+        select_query += f""" ORDER BY {identifier(sort_by)} {identifier(order)}"""
 
     movies = db.run(sql=select_query)
     db.close()
