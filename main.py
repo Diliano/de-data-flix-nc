@@ -4,16 +4,16 @@ from pg8000.native import identifier, literal
 
 def select_movies(sort_by="title", order="ASC", min_rating=None, location=None):
     if sort_by not in {"title", "release_date", "rating", "cost"}:
-        raise ValueError(f"Invalid sort_by argument provided: {sort_by}")
+        invalid_param_handler("sort_by", sort_by)
 
     if order not in {"ASC", "DESC"}:
-        raise ValueError(f"Invalid order argument provided: {order}")
+        invalid_param_handler("order", order)
 
     if min_rating and min_rating not in range(0, 11):
-        raise ValueError(f"Invalid min_rating argument provided: {min_rating}")
+        invalid_param_handler("min_rating", min_rating)
 
     if location and location not in {"Leeds", "Manchester", "Newcastle", "Birmingham"}:
-        raise ValueError(f"Invalid location argument provided: {location}")
+        invalid_param_handler("location", location)
 
     db = connect_to_db()
 
@@ -65,3 +65,7 @@ def select_movies(sort_by="title", order="ASC", min_rating=None, location=None):
     ]
 
     return {"movies": formatted_movies}
+
+
+def invalid_param_handler(param, arg):
+    raise ValueError(f"Invalid {param} argument provided: {arg}")
