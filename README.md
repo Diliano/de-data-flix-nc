@@ -1,3 +1,5 @@
-# NC-flix
+# Data Engineering Bootcamp - SQL & pg8000
 
-Instructions for today's sprint can be found at: https://l2c.northcoders.com/courses/de2-advanced-data/nc-flix
+## Overview
+
+This repository contains work completed as part of the SQL & pg8000 Sprint during my Data Engineering Bootcamp. 
